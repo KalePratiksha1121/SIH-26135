@@ -1,0 +1,28 @@
+<div class="card card-hover p-4">
+    <h5 class="fw-bold mb-3" style="color:var(--gov-dark);"><i class="bi bi-table"></i> Recent Trainees</h5>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead style="background:var(--gov-dark);color:white;">
+                <tr>
+                    <th>Master ID</th><th>Name</th><th>District</th><th>Course</th><th>Company</th><th>Salary</th><th>Score</th><th>Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in trainees %}
+                <tr>
+                    <td><code>{{ t.master_id }}</code></td>
+                    <td>{{ t.full_name }}</td>
+                    <td>{{ t.district }}</td>
+                    <td>{{ t.course }}</td>
+                    <td>{{ t.company_name|default:"-" }}</td>
+                    <td>₹{{ t.salary|floatformat:0 }}</td>
+                    <td>{{ t.confidence_score }}/100</td>
+                    <td><span class="badge badge-{{ t.score_level|lower }}">{{ t.score_level }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{% url 'fraud_detection' %}" class="btn btn-sm btn-outline-danger mt-2">View Fraud Detection</a>
+    <a href="{% url 'provider_ranking' %}" class="btn btn-sm btn-outline-primary mt-2 ms-2">View Provider Rankings</a>
+</div>

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Fraud Detection{% endblock %}
+{% block nav_fraud %}active{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3 class="fw-bold mb-3" style="color:var(--gov-dark);"><i class="bi bi-exclamation-triangle"></i> Fraud Detection</h3>
+    <p class="text-muted">Automated anomaly detection across training providers.</p>
+
+    <div class="insight-box mb-4">
+        <h6 class="fw-bold" style="color:var(--gov-orange);"><i class="bi bi-lightbulb"></i> Detection Logic</h6>
+        <ul class="mb-0" style="font-size:14px;">
+            <li><strong>RED FLAG:</strong> Placement ≥ 80% but Retention ≤ 20% — indicates possible ghost/fake placements</li>
+            <li><strong>SUSPICIOUS:</strong> Placement > 70% but Retention < 40% — significant gap requires investigation</li>
+            <li><strong>CLEAN:</strong> Balanced placement and retention ratios</li>
+        </ul>
+    </div>
+
+    <div class="card card-hover p-4">
+        <h6 class="fw-bold mb-3">Provider Fraud Analysis</h6>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead style="background:var(--gov-dark);color:white;">
+                    <tr><th>Provider ID</th><th>Provider Name</th><th>Placement</th><th>Retention</th><th>Fraud Status</th><th>Insight</th></tr>
+                </thead>
+                <tbody>
+                    {% for item in fraud_list %}
+                    <tr>
+                        <td><code>{{ item.provider.provider_id }}</code></td>
+                        <td>{{ item.provider.name }}</td>
+                        <td>{{ item.provider.placement }}%</td>
+                        <td>{{ item.provider.retention }}%</td>
+                        <td>
+                            {% if item.provider.fraud_status == 'red_flag' %}<span class="red-flag">RED FLAG</span>
+                            {% elif item.provider.fraud_status == 'suspicious' %}<span class="badge bg-warning text-dark">Suspicious</span>
+                            {% else %}<span class="badge bg-success">Clean</span>{% endif %}
+                        </td>
+                        <td><small>{{ item.insight }}</small></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center text-muted py-4">No providers. Run seed data first.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

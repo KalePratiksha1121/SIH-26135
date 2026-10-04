@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Hero -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold" style="color: var(--gov-dark);">MahaKaushalyaSetu</h2>
+        <p class="marathi" style="font-size:18px;color:#666;">महाकौशल्यसेतू — Empowering Maharashtra's Skilled Workforce</p>
+        <p style="color:#777;max-width:700px;margin:0 auto;">A unified platform for trainee verification, consent management, and provider accountability under the DPDP Act 2023.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-4">
+            <div class="stat-card" style="background: linear-gradient(135deg, #ff6b1a, #e55a0e);">
+                <div class="stat-num">{{ stats.trained }}</div>
+                <div class="stat-label">Trainees Trained</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card" style="background: linear-gradient(135deg, #1a73e8, #0d5fc0);">
+                <div class="stat-num">{{ stats.verified }}</div>
+                <div class="stat-label">Verified Placements</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card" style="background: linear-gradient(135deg, #1a2332, #2a3344);">
+                <div class="stat-num">{{ stats.employers }}</div>
+                <div class="stat-label">Employer Partners</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role Cards -->
+    <h4 class="mb-3" style="color:var(--gov-dark);">Select Your Role | तुमची भूमिका निवडा</h4>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <a href="{% url 'login' %}" class="text-decoration-none">
+                <div class="role-card card-hover" style="background: linear-gradient(135deg, #ff6b1a, #e55a0e); color:white;">
+                    <div class="p-4 text-center">
+                        <div class="role-icon mb-2"><i class="bi bi-person-badge"></i></div>
+                        <h5 class="fw-bold mb-1">Trainee</h5>
+                        <p class="marathi mb-0" style="opacity:0.9;">प्रशिक्षणार्थी</p>
+                        <p class="mt-2" style="font-size:13px;opacity:0.85;">Register, verify employment, manage consent</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'login' %}" class="text-decoration-none">
+                <div class="role-card card-hover" style="background: linear-gradient(135deg, #1a73e8, #0d5fc0); color:white;">
+                    <div class="p-4 text-center">
+                        <div class="role-icon mb-2"><i class="bi bi-building"></i></div>
+                        <h5 class="fw-bold mb-1">Employer</h5>
+                        <p class="marathi mb-0" style="opacity:0.9;">नियोक्ता</p>
+                        <p class="mt-2" style="font-size:13px;opacity:0.85;">Verify trainee employment via OTP</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'login' %}" class="text-decoration-none">
+                <div class="role-card card-hover" style="background: linear-gradient(135deg, #1a2332, #34405a); color:white;">
+                    <div class="p-4 text-center">
+                        <div class="role-icon mb-2"><i class="bi bi-shield-check"></i></div>
+                        <h5 class="fw-bold mb-1">Government</h5>
+                        <p class="marathi mb-0" style="opacity:0.9;">शासन</p>
+                        <p class="mt-2" style="font-size:13px;opacity:0.85;">Monitor data, detect fraud, rank providers</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card card-hover p-3">
+                <h6 class="fw-bold" style="color:var(--gov-orange);"><i class="bi bi-graph-up-arrow"></i> Quick Verification</h6>
+                <p class="text-muted mb-2" style="font-size:14px;">Start confidence score journey from 20 to 100 points.</p>
+                <a href="{% url 'verification' %}" class="btn btn-sm btn-outline-primary">Go to Verification</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-hover p-3">
+                <h6 class="fw-bold" style="color:var(--gov-orange);"><i class="bi bi-database-add"></i> Load Demo Data</h6>
+                <p class="text-muted mb-2" style="font-size:14px;">Create demo users and 5 trainees with one click.</p>
+                <a href="{% url 'seed' %}" class="btn btn-sm btn-outline-primary">Run Seed Data</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

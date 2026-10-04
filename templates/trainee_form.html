@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Register Trainee{% endblock %}
+{% block nav_trainee %}active{% endblock %}
+{% block content %}
+<div class="container mt-4" style="max-width:720px;">
+    <div class="card card-hover p-4">
+        <div class="text-center mb-4">
+            <h3 class="fw-bold" style="color:var(--gov-orange);">Majha Job Mahiti Taka</h3>
+            <p class="marathi" style="font-size:16px;color:#666;">माझा जॉब माहिती तका — My Job Information Card</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                    <input type="text" name="full_name" class="form-control" required placeholder="Enter your full name">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Mobile Number <span class="text-danger">*</span></label>
+                    <input type="tel" name="mobile" class="form-control" required placeholder="98XXXXXXXX" pattern="[0-9]{10}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">District <span class="text-danger">*</span></label>
+                    <select name="district" class="form-select">
+                        {% for d in districts %}
+                        <option value="{{ d }}">{{ d }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Course <span class="text-danger">*</span></label>
+                    <select name="course" class="form-select">
+                        {% for c in courses %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Company Name</label>
+                    <input type="text" name="company_name" class="form-control" placeholder="Current employer">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Monthly Salary (₹)</label>
+                    <input type="number" name="salary" class="form-control" placeholder="0" min="0">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Upload Salary Slip</label>
+                    <input type="file" name="salary_slip" class="form-control" accept="image/*,.pdf">
+                    <small class="text-muted">Upload salary slip for +15 confidence points</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Upload Shop / Workplace Photo</label>
+                    <input type="file" name="shop_photo" class="form-control" accept="image/*">
+                    <small class="text-muted">Workplace verification photo</small>
+                </div>
+            </div>
+
+            <div class="mt-4 p-3 rounded" style="background:#fff8f0;border:1px solid var(--gov-orange);">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="consent" id="consentCheck" required>
+                    <label class="form-check-label" for="consentCheck">
+                        <strong>Consent (12 months):</strong> I authorize MahaKaushalyaSetu to collect, store, and verify my employment data under the DPDP Act 2023 for a period of 12 months.
+                        <br>
+                        <span class="marathi" style="color:#666;">मी महाकौशल्यसेतूला माझा रोजगार डेटा DPDP अधिनियम 2023 अंतर्गत 12 महिन्यांसाठी संकलित, साठवण्यास आणि पडताळण्यास अधिकृत करतो/करते.</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-lg w-100 mt-4 text-white" style="background:var(--gov-orange);">
+                <i class="bi bi-check-circle"></i> Submit Registration
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

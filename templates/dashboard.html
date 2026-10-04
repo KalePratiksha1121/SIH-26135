@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block nav_dashboard %}active{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        {% if current_avatar %}
+        <img src="{{ current_avatar }}" class="avatar-img" style="width:60px;height:60px;" alt="avatar">
+        {% endif %}
+        <div>
+            <h3 class="fw-bold mb-0" style="color:var(--gov-dark);">{{ dashboard_title }}</h3>
+            <p class="text-muted mb-0">Welcome, {{ user.username }} — real-time data overview</p>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card" style="background:linear-gradient(135deg,#ff6b1a,#e55a0e);">
+                <div class="stat-num">{{ total_trainees }}</div>
+                <div class="stat-label">Total Trainees</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" style="background:linear-gradient(135deg,#00a651,#008542);">
+                <div class="stat-num">{{ total_verified }}</div>
+                <div class="stat-label">Verified (High Score)</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" style="background:linear-gradient(135deg,#1a73e8,#0d5fc0);">
+                <div class="stat-num">{{ active_consents }}</div>
+                <div class="stat-label">Active Consents</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" style="background:linear-gradient(135deg,#e63946,#c1121f);">
+                <div class="stat-num">{{ revoked_consents }}</div>
+                <div class="stat-label">Revoked Consents</div>
+            </div>
+        </div>
+    </div>
+
+    {% include dashboard_template %}
+</div>
+{% endblock %}

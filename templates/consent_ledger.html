@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Consent Ledger{% endblock %}
+{% block nav_consent %}active{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <!-- DPDP Banner -->
+    <div class="dpdp-banner mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-shield-lock-fill" style="font-size:32px;color:var(--gov-orange);"></i>
+            <div>
+                <h5 class="mb-0">DPDP Act 2023 — Digital Personal Data Protection</h5>
+                <p class="mb-0" style="font-size:13px;opacity:0.8;">All consent records are maintained per the Digital Personal Data Protection Act 2023. Trainees can revoke consent at any time.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card" style="background:linear-gradient(135deg,#1a2332,#2a3344);">
+                <div class="stat-num">{{ display_total }}</div>
+                <div class="stat-label">Total Consents (DB: {{ total }})</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card" style="background:linear-gradient(135deg,#00a651,#008542);">
+                <div class="stat-num">{{ display_active }}</div>
+                <div class="stat-label">Active Consents (DB: {{ active }})</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card" style="background:linear-gradient(135deg,#e63946,#c1121f);">
+                <div class="stat-num">{{ display_revoked }}</div>
+                <div class="stat-label">Revoked Consents (DB: {{ revoked }})</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card card-hover p-4">
+        <h5 class="fw-bold mb-3" style="color:var(--gov-dark);"><i class="bi bi-list-check"></i> Consent Records</h5>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead style="background:var(--gov-dark);color:white;">
+                    <tr>
+                        <th>Consent ID</th><th>Trainee</th><th>Master ID</th><th>Status</th><th>Granted At</th><th>Duration</th><th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in consents %}
+                    <tr>
+                        <td><code>{{ c.consent_id }}</code></td>
+                        <td>{{ c.trainee.full_name }}</td>
+                        <td>{{ c.trainee.master_id }}</td>
+                        <td>
+                            {% if c.status == 'Active' %}
+                            <span class="badge bg-success">Active</span>
+                            {% else %}
+                            <span class="badge bg-danger">Revoked</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ c.granted_at|date:"M d, Y H:i" }}</td>
+                        <td>{{ c.duration_months }} months</td>
+                        <td>
+                            {% if c.status == 'Active' %}
+                            <form method="post" action="{% url 'revoke_consent' c.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Revoke this consent?');">
+                                    <i class="bi bi-x-circle"></i> Revoke
+                                </button>
+                            </form>
+                            {% else %}
+                            <span class="text-muted" style="font-size:12px;">Revoked {{ c.revoked_at|date:"M d" }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" class="text-center text-muted py-4">No consent records. Run seed data first.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

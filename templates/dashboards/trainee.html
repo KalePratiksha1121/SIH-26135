@@ -1,0 +1,44 @@
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card card-hover p-4">
+            <h5 class="fw-bold mb-3" style="color:var(--gov-orange);"><i class="bi bi-person"></i> My Profile</h5>
+            {% if my_trainee %}
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <img src="{{ current_avatar }}" class="avatar-img" style="width:60px;height:60px;" alt="avatar">
+                <div>
+                    <h6 class="mb-0">{{ my_trainee.full_name }}</h6>
+                    <small class="text-muted"><code>{{ my_trainee.master_id }}</code></small>
+                </div>
+            </div>
+            <table class="table table-sm">
+                <tr><th>District:</th><td>{{ my_trainee.district }}</td></tr>
+                <tr><th>Course:</th><td>{{ my_trainee.course }}</td></tr>
+                <tr><th>Company:</th><td>{{ my_trainee.company_name|default:"Not employed" }}</td></tr>
+                <tr><th>Salary:</th><td>₹{{ my_trainee.salary|floatformat:0 }}</td></tr>
+            </table>
+            <a href="{% url 'verification_detail' my_trainee.id %}" class="btn btn-sm btn-outline-primary">Go to My Verification</a>
+            {% else %}
+            <p class="text-muted">No trainee profile found. Please register first.</p>
+            <a href="{% url 'trainee_form' %}" class="btn btn-sm btn-primary">Register Now</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-hover p-4">
+            <h5 class="fw-bold mb-3" style="color:var(--gov-orange);"><i class="bi bi-speedometer2"></i> My Confidence Score</h5>
+            {% if my_trainee %}
+            <div class="text-center mb-3">
+                <div style="font-size:48px;font-weight:700;color:var(--gov-orange);">{{ my_trainee.confidence_score }}</div>
+                <div>/100</div>
+                <span class="badge badge-{{ my_trainee.score_level|lower }} mt-2" style="font-size:14px;">{{ my_trainee.score_level }}</span>
+            </div>
+            <div class="progress mb-2" style="height:12px;">
+                <div class="progress-bar" style="width:{{ my_trainee.confidence_score }}%;background:var(--gov-orange);"></div>
+            </div>
+            <a href="{% url 'confidence_engine' %}" class="btn btn-sm btn-outline-primary mt-2">View Confidence Engine</a>
+            {% else %}
+            <p class="text-muted">Complete verification to see your score.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Confidence Engine{% endblock %}
+{% block nav_confidence %}active{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3 class="fw-bold mb-3" style="color:var(--gov-dark);"><i class="bi bi-speedometer2"></i> Confidence Score Engine</h3>
+    <p class="text-muted">Weighted verification model totaling 100 points across 5 evidence sources.</p>
+
+    <div class="row g-4">
+        <!-- Pie Chart + Checklist -->
+        <div class="col-md-5">
+            <div class="card card-hover p-4">
+                <h6 class="fw-bold mb-3">Score Composition</h6>
+                <canvas id="scorePie" height="240"></canvas>
+            </div>
+        </div>
+
+        <!-- Selected Trainee -->
+        <div class="col-md-7">
+            {% if selected %}
+            <div class="card card-hover p-4 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="fw-bold mb-0">{{ selected.full_name }}</h5>
+                        <small class="text-muted"><code>{{ selected.master_id }}</code> | {{ selected.district }} | {{ selected.course }}</small>
+                    </div>
+                    <div class="text-end">
+                        <div style="font-size:36px;font-weight:700;color:var(--gov-orange);">{{ selected.confidence_score }}</div>
+                        <span class="badge badge-{{ selected.score_level|lower }}">{{ selected.score_level }}</span>
+                    </div>
+                </div>
+                <div class="progress mt-3" style="height:10px;">
+                    <div class="progress-bar" style="width:{{ selected.confidence_score }}%;background:var(--gov-orange);"></div>
+                </div>
+            </div>
+
+            <!-- Checklist -->
+            <div class="card card-hover p-4">
+                <h6 class="fw-bold mb-3"><i class="bi bi-list-check"></i> Verification Checklist</h6>
+                {% for item in checklist %}
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <div>
+                        {% if item.done %}
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                        {% else %}
+                        <i class="bi bi-circle text-muted"></i>
+                        {% endif %}
+                        <span class="ms-2">{{ item.label }}</span>
+                    </div>
+                    <span class="badge {% if item.done %}bg-success{% else %}bg-secondary{% endif %}">+{{ item.points }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="card card-hover p-4">
+                <h6 class="fw-bold mb-3">Select Trainee</h6>
+                <form method="get" class="d-flex gap-2">
+                    <select name="trainee_id" class="form-select">
+                        {% for t in trainees %}
+                        <option value="{{ t.id }}">{{ t.full_name }} ({{ t.master_id }})</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">View</button>
+                </form>
+                {% if not trainees %}
+                <p class="text-muted mt-3">No trainees. Run seed data first.</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+new Chart(document.getElementById('scorePie'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Self Declaration (20)', 'Salary Slip (15)', 'Bank Verification (10)', 'Udyam (15)', 'Employer OTP (40)'],
+        datasets: [{
+            data: [20, 15, 10, 15, 40],
+            backgroundColor: ['#ff6b1a', '#1a73e8', '#00a651', '#ffb800', '#e63946'],
+            borderWidth: 2, borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 11 } } },
+            title: { display: true, text: 'Total: 100 Points', font: { size: 14 } }
+        }
+    }
+});
+</script>
+{% endblock %}

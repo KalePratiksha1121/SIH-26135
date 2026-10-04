@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Provider Ranking{% endblock %}
+{% block nav_provider %}active{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h3 class="fw-bold mb-3" style="color:var(--gov-dark);"><i class="bi bi-bar-chart-line"></i> Provider Ranking</h3>
+    <p class="text-muted">Placement rate vs 6-month retention rate comparison.</p>
+
+    <div class="card card-hover p-4 mb-4">
+        <canvas id="providerChart" height="120"></canvas>
+    </div>
+
+    <div class="card card-hover p-4">
+        <h6 class="fw-bold mb-3">Provider Leaderboard</h6>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead style="background:var(--gov-dark);color:white;">
+                    <tr><th>Rank</th><th>Provider</th><th>Provider ID</th><th>Placement</th><th>Retention</th><th>Confidence</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for p in providers %}
+                    <tr>
+                        <td>#{{ forloop.counter }}</td>
+                        <td>{{ p.name }}</td>
+                        <td><code>{{ p.provider_id }}</code></td>
+                        <td>{{ p.placement }}%</td>
+                        <td>{{ p.retention }}%</td>
+                        <td>{{ p.confidence }}%</td>
+                        <td>
+                            {% if p.is_red_flag %}<span class="red-flag">RED FLAG</span>
+                            {% elif p.fraud_status == 'suspicious' %}<span class="badge bg-warning text-dark">Suspicious</span>
+                            {% else %}<span class="badge bg-success">Clean</span>{% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7" class="text-center text-muted py-4">No providers. Run seed data first.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+var providers = [
+    {% for p in providers %}
+    { name: "{{ p.name|escapejs }}", placement: {{ p.placement }}, retention: {{ p.retention }} }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+
+new Chart(document.getElementById('providerChart'), {
+    type: 'bar',
+    data: {
+        labels: providers.map(p => p.name),
+        datasets: [
+            { label: 'Placement %', data: providers.map(p => p.placement), backgroundColor: '#ff6b1a', borderRadius: 6 },
+            { label: '6-Month Retention %', data: providers.map(p => p.retention), backgroundColor: '#1a73e8', borderRadius: 6 }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true, max: 100, title: { display: true, text: 'Percentage (%)' } } },
+        plugins: { legend: { position: 'top' } }
+    }
+});
+</script>
+{% endblock %}

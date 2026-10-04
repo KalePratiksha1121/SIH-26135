@@ -1,0 +1,252 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MahaKaushalyaSetu{% endblock %} | Government of Maharashtra</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --gov-orange: #ff6b1a;
+            --gov-orange-dark: #e55a0e;
+            --gov-blue: #1a73e8;
+            --gov-dark: #1a2332;
+            --gov-green: #00a651;
+            --gov-red: #e63946;
+            --gov-warning: #ffb800;
+        }
+        * { font-family: 'Inter', 'Noto Sans Devanagari', sans-serif; }
+        .marathi { font-family: 'Noto Sans Devanagari', sans-serif; }
+        .gov-header {
+            background: linear-gradient(135deg, var(--gov-orange) 0%, var(--gov-orange-dark) 100%);
+            color: white;
+            padding: 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .gov-header .ashoka { width: 40px; height: 40px; }
+        .gov-navbar {
+            background: var(--gov-dark);
+            padding: 0;
+        }
+        .gov-navbar .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 14px 18px !important;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+        .gov-navbar .nav-link:hover, .gov-navbar .nav-link.active {
+            color: white !important;
+            border-bottom-color: var(--gov-orange);
+            background: rgba(255,107,26,0.1);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+        }
+        .stat-card {
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            transition: transform 0.3s;
+        }
+        .stat-card:hover { transform: scale(1.03); }
+        .stat-card .stat-num { font-size: 28px; font-weight: 700; }
+        .stat-card .stat-label { font-size: 13px; opacity: 0.9; }
+        .role-card {
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .role-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+        .role-card .role-icon { font-size: 48px; }
+        .score-low { color: var(--gov-red); }
+        .score-medium { color: var(--gov-warning); }
+        .score-high { color: var(--gov-green); }
+        .badge-low { background: var(--gov-red); }
+        .badge-medium { background: var(--gov-warning); color: #333; }
+        .badge-high { background: var(--gov-green); }
+        .red-flag {
+            background: linear-gradient(135deg, #e63946, #c1121f);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .otp-modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+        .otp-box {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .otp-digit {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: var(--gov-orange);
+            font-family: monospace;
+        }
+        .otp-input {
+            font-size: 28px;
+            letter-spacing: 6px;
+            text-align: center;
+            width: 220px;
+            padding: 8px;
+            border: 2px solid var(--gov-orange);
+            border-radius: 8px;
+        }
+        .footer-gov {
+            background: var(--gov-dark);
+            color: rgba(255,255,255,0.7);
+            padding: 24px 0;
+            margin-top: 40px;
+            font-size: 13px;
+        }
+        .dpdp-banner {
+            background: linear-gradient(90deg, #1a2332, #2a3344);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 10px;
+            border-left: 5px solid var(--gov-orange);
+        }
+        .journey-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+        .journey-step.active {
+            background: rgba(255,107,26,0.1);
+            border-left: 4px solid var(--gov-orange);
+        }
+        .journey-dot {
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .insight-box {
+            background: linear-gradient(135deg, #fff8f0, #fff);
+            border: 1px solid var(--gov-orange);
+            border-left: 5px solid var(--gov-orange);
+            padding: 16px;
+            border-radius: 10px;
+        }
+        .avatar-img {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gov-orange);
+        }
+        body { background: #f5f6f8; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Government Header -->
+    <div class="gov-header">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="ashoka" style="width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border-radius:50%;">
+                        <i class="bi bi-microsoft" style="font-size:24px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:11px;opacity:0.85;">Government of Maharashtra | महाराष्ट्र शासन</div>
+                        <div style="font-size:18px;font-weight:700;">MahaKaushalyaSetu</div>
+                        <div class="marathi" style="font-size:11px;opacity:0.85;">महाकौशल्यसेतू — Skill Verification Bridge</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    {% if user.is_authenticated %}
+                        <img src="{{ current_avatar }}" class="avatar-img" alt="avatar">
+                        <div class="text-end">
+                            <div style="font-size:13px;font-weight:600;">{{ user.username }}</div>
+                            <div style="font-size:11px;opacity:0.8;">{{ current_role }}</div>
+                        </div>
+                        <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-light">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="gov-navbar navbar navbar-expand-lg">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon" style="filter:invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link {% block nav_home %}{% endblock %}" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link {% block nav_dashboard %}{% endblock %}" href="{% url 'dashboard' %}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link {% block nav_trainee %}{% endblock %}" href="{% url 'trainee_form' %}">Register Trainee</a></li>
+                    <li class="nav-item"><a class="nav-link {% block nav_consent %}{% endblock %}" href="{% url 'consent_ledger' %}">Consent Ledger</a></li>
+                    <li class="nav-item"><a class="nav-link {% block nav_verify %}{% endblock %}" href="{% url 'verification' %}">Verification</a></li>
+                    <li class="nav-item"><a class="nav-link {% block nav_confidence %}{% endblock %}" href="{% url 'confidence_engine' %}">Confidence Engine</a></li>
+                    <li class="nav-item"><a class="nav-link {% block nav_provider %}{% endblock %}" href="{% url 'provider_ranking' %}">Provider Ranking</a></li>
+                    <li class="nav-item"><a class="nav-link {% block nav_fraud %}{% endblock %}" href="{% url 'fraud_detection' %}">Fraud Detection</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer-gov text-center">
+        <div class="container">
+            <div>Government of Maharashtra | Skill Development, Employment & Entrepreneurship Department</div>
+            <div class="mt-1">MahaKaushalyaSetu &copy; 2026 | SIH Problem Statement 26135 | DPDP Act 2023 Compliant</div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
